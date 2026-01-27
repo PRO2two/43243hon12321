@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patch 0.9.1 Notes - Heroes of Newerth Reborn</title>
+    <style>
+        /* Основные стили */
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #050505;
+            --bg-card: #141414;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-red: #e63946;
+            --accent-blue: #457b9d;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Шапка */
+        .site-header {
+            background: var(--bg-darker);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent-red);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--text-primary);
+        }
+        
+        .main-nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-link.active {
+            color: var(--accent-red);
+        }
+        
+        .play-button {
+            background: linear-gradient(135deg, var(--accent-red), #c1121f);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Главный баннер */
+        .patch-banner {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .patch-title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, var(--accent-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .patch-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+        
+        .patch-date {
+            display: inline-block;
+            background: rgba(230, 57, 70, 0.2);
+            color: var(--accent-red);
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        
+        /* Стили для перевода */
+        .ru-translation {
+            color: #888;
+            font-style: italic;
+            margin-top: 5px;
+            font-size: 0.9em;
+            border-left: 2px solid var(--accent-red);
+            padding-left: 10px;
+            margin-left: 5px;
+        }
+        
+        /* Основной контент */
+        .content-section {
+            margin-bottom: 80px;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+        
+        /* Новый герой */
+        .new-hero-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .hero-name-large {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--accent-red);
+            margin-bottom: 30px;
+        }
+        
+        .ability-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .ability-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ability-hotkey {
+            background: var(--accent-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .ability-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .ability-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .ability-stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+        }
+        
+        .stat-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Изменения героев */
+        .hero-changes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .hero-change-card {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .hero-change-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .hero-name {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .change-tag {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .tag-buff {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+        
+        .tag-nerf {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+        
+        .tag-new {
+            background: rgba(66, 153, 225, 0.2);
+            color: #4299e1;
+        }
+        
+        .tag-fix {
+            background: rgba(160, 174, 192, 0.2);
+            color: #a0aec0;
+        }
+        
+        .change-details {
+            color: var(--text-secondary);
+        }
+        
+        .change-details ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .change-details li {
+            margin-bottom: 8px;
+        }
+        
+        /* Предметы */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .item-card {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .item-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-blue), #1d3557);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+        }
+        
+        .item-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        /* Исправления ошибок */
+        .bugs-section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px;
+        }
+        
+        .bug-category {
+            margin-bottom: 30px;
+        }
+        
+        .bug-category-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .bug-list {
+            columns: 2;
+            column-gap: 40px;
+        }
+        
+        .bug-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            break-inside: avoid;
+            border-left: 3px solid var(--accent-blue);
+        }
+        
+        /* Подвал */
+        .site-footer {
+            background: var(--bg-darker);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-red);
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 400px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .patch-title {
+                font-size: 42px;
+            }
+            
+            .hero-changes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .bug-list {
+                columns: 1;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .patch-title {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .new-hero-card {
+                padding: 25px;
+            }
+            
+            .ability-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <span>HoN</span>Reborn
+            </a>
+            
+            <nav class="main-nav">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link active">Patch Notes</a>
+                <a href="#" class="nav-link">Heroes</a>
+                <a href="#" class="nav-link">Items</a>
+                <a href="#" class="nav-link">Guides</a>
+                <a href="#" class="nav-link">Community</a>
+            </nav>
+            
+            <a href="#" class="play-button">Play For Free</a>
+        </div>
+    </header>
+
+    <!-- Главный баннер -->
+    <section class="patch-banner">
+        <div class="container">
+            <h1 class="patch-title">PATCH 0.9.1 NOTES</h1>
+            <p class="patch-subtitle">
+                MASTER OF ARMS ARRIVES WITH HIS VERSATILE WEAPON KIT, HERO BALANCE UPDATES, AND QUALITY-OF-LIFE IMPROVEMENTS.
+                <div class="ru-translation">МАСТЕР ОРУЖИЯ ПРИБЫВАЕТ СО СВОИМ УНИВЕРСАЛЬНЫМ АРСЕНАЛОМ, ОБНОВЛЕНИЯМИ БАЛАНСА ГЕРОЕВ И УЛУЧШЕНИЯМИ КАЧЕСТВА ИГРЫ.</div>
+            </p>
+            <div class="patch-date">JAN 25, 2026</div>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <main class="container">
+        <!-- Новый герой -->
+        <section class="content-section">
+            <h2 class="section-title">NEW HERO – MASTER OF ARMS</h2>
+            
+            <div class="new-hero-card">
+                <h3 class="hero-name-large">MASTER OF ARMS</h3>
+                
+                <!-- Ability Q -->
+                <div class="ability-card">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">Q</div>
+                        <h4 class="ability-title">OVERCHARGED SHOT</h4>
+                    </div>
+                    <p class="ability-description">
+                        Fire overcharged lightning that splits into 2 bolts upon reaching its target.
+                        <div class="ru-translation">Выстреливает перезаряженной молнией, которая разделяется на 2 болта при достижении цели.</div>
+                    </p>
+                    <div class="ability-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Main Target:</span>
+                            <span class="stat-value">70/140/210/280 Magic Damage and a 1.2/1.4/1.6/1.8 second Stun</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Split Projectiles:</span>
+                            <span class="stat-value">100 Magic Damage and a 40% Tapering Slow over 1.5 seconds</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ability W -->
+                <div class="ability-card">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">W</div>
+                        <h4 class="ability-title">ACID BOMB</h4>
+                    </div>
+                    <p class="ability-description">
+                        Lob an Acid Bomb at the target location that rolls, spraying acid for 6 seconds.
+                        <div class="ru-translation">Бросает кислотную бомбу в указанное место, которая катится и разбрызгивает кислоту в течение 6 секунд.</div>
+                    </p>
+                    <div class="ability-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Armor Reduction:</span>
+                            <span class="stat-value">-1/2/3/4 Armor</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Movement Speed Slow:</span>
+                            <span class="stat-value">11/14/17/20%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Physical Damage:</span>
+                            <span class="stat-value">20/35/50/65 per second</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ability E -->
+                <div class="ability-card">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">E</div>
+                        <h4 class="ability-title">WEAPON ENHANCEMENT</h4>
+                    </div>
+                    <p class="ability-description">
+                        Toggle between two weapon modes with passive bonuses that scale as you level:
+                        <div class="ru-translation">Переключение между двумя режимами оружия с пассивными бонусами, которые улучшаются с уровнем:</div>
+                    </p>
+                    <div class="ability-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Bulldozer:</span>
+                            <span class="stat-value">+90/105/120/135/150 Attack Range and +0/8/16/24/32 Attack Damage. Activate to swap to Cheetah.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cheetah:</span>
+                            <span class="stat-value">-0/22/18/14/10% Attack Damage against heroes but +0/45/70/95/120 Attack Speed. Activate to swap to Bulldozer.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Staff of the Master:</span>
+                            <span class="stat-value">Simultaneously grants the effects of both Bulldozer and Cheetah.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ability R -->
+                <div class="ability-card">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">R</div>
+                        <h4 class="ability-title">MASTER'S CALL</h4>
+                    </div>
+                    <p class="ability-description">
+                        Target yourself or an ally to grant a shield that absorbs 200/400/600 post-mitigation Damage for up to 8 seconds.
+                        <div class="ru-translation">Цельтесь в себя или союзника, чтобы дать щит, который поглощает 200/400/600 пост-митигированного урона в течение 8 секунд.</div>
+                    </p>
+                    <div class="ability-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Cheetah Bonus:</span>
+                            <span class="stat-value">+100/150/200 Attack Speed for 14 seconds</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Bulldozer Bonus:</span>
+                            <span class="stat-value">+40/50/60 Attack Damage for 14 seconds</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Movement Speed:</span>
+                            <span class="stat-value">Tapering +60/90/120 for the first 6 seconds</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Staff of the Master:</span>
+                            <span class="stat-value">Attack Speed and Attack Damage bonuses drop to 70% effectiveness (70/105/140 Attack Speed, 28/35/42 Attack Damage)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hero Description -->
+                <div class="ability-card">
+                    <h4 class="ability-title">ARSENAL SPECIALIST, MODERN WARFARE</h4>
+                    <p class="ability-description">
+                        Master of Arms finally joins HoN Reborn with his signature versatile kit and high-octane playstyle. With an arsenal rivaled by none, he spreads chaos among his enemies while rallying his allies with his lust for battle. His complete kit includes a full ability set, complete visual effects, sounds, voice lines, all animations and projectile effects.
+                        <div class="ru-translation">Мастер Оружия наконец присоединяется к HoN Reborn со своим фирменным универсальным набором и динамичным стилем игры. С арсеналом, не имеющим себе равных, он сеет хаос среди врагов, одновременно воодушевляя союзников своей жаждой битвы. Его полный набор включает полный набор способностей, полные визуальные эффекты, звуки, голосовые реплики, все анимации и эффекты снарядов.</div>
+                    </p>
+                    <div class="ability-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Hero Pool:</span>
+                            <span class="stat-value">Fully selectable in Matchmaking and public games with ban protection for the initial release</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Weapon Enhancement:</span>
+                            <span class="stat-value">Passive bonuses improve your attacks as you level up your abilities</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Visual Pass:</span>
+                            <span class="stat-value">Complete visual effects, sounds, and voice lines have been modernized for Reborn</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Audio:</span>
+                            <span class="stat-value">All classic voice responses and combat barks are fully implemented</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основные особенности -->
+        <section class="content-section">
+            <h2 class="section-title">FEATURE HIGHLIGHTS</h2>
+            
+            <div class="new-hero-card">
+                <h4 class="ability-title">GAMEPLAY PATCH</h4>
+                <p class="ability-description">
+                    This patch brings substantial balance changes. Over 25 heroes receive significant changes, alongside sweeping item adjustments designed to shake up the meta. We're excited to see what new strategies emerge from these updates!
+                    <div class="ru-translation">Этот патч приносит существенные изменения баланса. Более 25 героев получают значительные изменения, наряду с масштабными корректировками предметов, предназначенными для встряски меты. Мы рады видеть, какие новые стратегии появятся благодаря этим обновлениям!</div>
+                </p>
+            </div>
+            
+            <div class="new-hero-card">
+                <h4 class="ability-title">IN-GAME VOICE CHAT INDICATORS</h4>
+                <p class="ability-description">
+                    Added a HUD Voice Indicator Overlay so you can easily see who is talking and when.
+                    <div class="ru-translation">Добавлено наложение индикатора голоса на HUD, чтобы вы могли легко видеть, кто говорит и когда.</div>
+                </p>
+            </div>
+            
+            <div class="new-hero-card">
+                <h4 class="ability-title">LEADERBOARDS BY MAP TYPE</h4>
+                <p class="ability-description">
+                    Leaderboards are now split and displayed by map type, allowing for more focused competition in your preferred game mode.
+                    <div class="ru-translation">Таблицы лидеров теперь разделены и отображаются по типам карт, что позволяет сосредоточить соревнование в предпочитаемом вами игровом режиме.</div>
+                </p>
+            </div>
+        </section>
+
+        <!-- Игровой патч -->
+        <section class="content-section">
+            <h2 class="section-title">GAMEPLAY PATCH</h2>
+            
+            <div class="new-hero-card">
+                <h4 class="ability-title">WELLS</h4>
+                <div class="ability-stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Increased attack damage:</span>
+                        <span class="stat-value">from 175 to 200</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">New:</span>
+                        <span class="stat-value">They now have true strike</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Изменения героев -->
+        <section class="content-section">
+            <h2 class="section-title">HEROES</h2>
+            
+            <div class="hero-changes-grid">
+                <!-- Behemoth -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">BEHEMOTH</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Heavyweight (E)</strong>
+                        <ul>
+                            <li>Damage increased from 25/50/75/100 to 40/60/80/100</li>
+                        </ul>
+                        <strong>Shockwave (R)</strong>
+                        <ul>
+                            <li>Echo damage increased from 30/40/50 to 30/45/60 per unit/hero</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Chronos -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">CHRONOS</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        Agility gain per level increased from 2.8 to 3
+                    </div>
+                </div>
+                
+                <!-- Corrupted Disciple -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">CORRUPTED DISCIPLE</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Static Discharge (E)</strong>
+                        <ul>
+                            <li>Movement speed bonus increased from 3/6/9/12% to 4/8/12/16%</li>
+                            <li>Damage rescaled from 50/80/110/140 to 40/80/120/160</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Defiler -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">DEFILER</span>
+                        <span class="change-tag tag-nerf">Nerf</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Grave Silence (W)</strong>
+                        <ul>
+                            <li>Duration rescaled from 2/2.7/3.3/4 to 1.75/2.5/3.25/4</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Devourer -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">DEVOURER</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Guttling Hook (Q)</strong>
+                        <ul>
+                            <li>Cast range increased from 850/1000/1150/1300 to 925/1050/1175/1300</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Electrician -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">ELECTRICIAN</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Static Grip (Q)</strong>
+                        <ul>
+                            <li>Damage increased from 25/40/65/80 to 25/45/65/85</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Empath -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">EMPATH</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Essence Link (Q)</strong>
+                        <ul>
+                            <li>Damage/heal increased from 100/150/190/230 to 100/150/200/250</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Engineer -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">ENGINEER</span>
+                        <span class="change-tag tag-nerf">Nerf</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Steam Turret (W)</strong>
+                        <ul>
+                            <li>Cooldown increased from 20/18/16/14 to 26/22/18/14 seconds</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Gemini -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">GEMINI</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Twin Fangs (W)</strong>
+                        <ul>
+                            <li>Damage increased from each pet from 50/80/110/140 to 50/85/120/155</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Glacius -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">GLACIUS</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Tundra Blast (Q)</strong>
+                        <ul>
+                            <li>Damage rescaled from 110/170/190/210 to 110/160/210/260</li>
+                        </ul>
+                        <strong>Glacial Downpour (R)</strong>
+                        <ul>
+                            <li>Channel time increased from 5 to 6 seconds</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Hellbringer -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">HELLBRINGER</span>
+                        <span class="change-tag tag-nerf">Nerf</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Summon Malphas (R)</strong>
+                        <ul>
+                            <li>Malphas Immolate aura no longer stacks</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Lodestone -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">LODESTONE</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Lodestone Plates (E)</strong>
+                        <ul>
+                            <li>Damage block increased from 15/25/35/45 to 15/30/45/60</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Maliken -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">MALIKEN</span>
+                        <span class="change-tag tag-nerf">Nerf</span>
+                    </div>
+                    <div class="change-details">
+                        Strength per level decreased from 3.5 to 3.2
+                        <ul>
+                            <li><strong>Possession (R):</strong> Bonus armor decreased from 10/15/20 to 5/10/15</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Monarch -->
+                <div class="hero-change-card">
+                    <div class="hero-change-header">
+                        <span class="hero-name">MONARCH</span>
+                        <span class="change-tag tag-buff">Buff</span>
+                    </div>
+                    <div class="change-details">
+                        <strong>Crippling Pollen (Q)</strong>
+                        <ul>
+                            <li>Damage rescaled from 100/150/180/210 to 110/150/190/230</li>
+                        </ul>
+                        <strong>Chrysalis (W)</strong>
+                        <ul>
+                            <li>He
