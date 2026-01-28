@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Примечания к патчу 0.9.1 - Heroes of Newerth Reborn</title>
+    <link rel="icon" href="https://heroesofnewerth.com/favicon.ico" type="image/x-icon">
+    <style>
+        /* Основные стили как на оригинальном сайте */
+        :root {
+            --hon-red: #e63946;
+            --hon-dark: #0a0a0a;
+            --hon-darker: #050505;
+            --hon-card: #141414;
+            --hon-text: #ffffff;
+            --hon-text-secondary: #a0a0a0;
+            --hon-border: #333333;
+            --hon-blue: #457b9d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--hon-dark);
+            color: var(--hon-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Контейнер */
+        .hon-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Шапка */
+        .hon-header {
+            background: var(--hon-darker);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--hon-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .hon-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hon-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--hon-red);
+            text-decoration: none;
+        }
+        
+        .hon-logo span {
+            color: var(--hon-text);
+        }
+        
+        .hon-nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .hon-nav-link {
+            color: var(--hon-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .hon-nav-link:hover {
+            color: var(--hon-text);
+        }
+        
+        .hon-nav-link.active {
+            color: var(--hon-red);
+        }
+        
+        /* Главный баннер */
+        .hon-banner {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hon-patch-title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, var(--hon-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hon-patch-subtitle {
+            font-size: 20px;
+            color: var(--hon-text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+        
+        .hon-patch-date {
+            display: inline-block;
+            background: rgba(230, 57, 70, 0.2);
+            color: var(--hon-red);
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        
+        /* Секции */
+        .hon-section {
+            margin-bottom: 80px;
+        }
+        
+        .hon-section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--hon-text);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .hon-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--hon-red);
+            border-radius: 2px;
+        }
+        
+        /* Новый герой */
+        .hon-hero-card {
+            background: var(--hon-card);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--hon-border);
+        }
+        
+        .hon-hero-name {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--hon-red);
+            margin-bottom: 30px;
+        }
+        
+        /* Способности */
+        .hon-ability {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--hon-blue);
+        }
+        
+        .hon-ability-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .hon-ability-hotkey {
+            background: var(--hon-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .hon-ability-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .hon-ability-desc {
+            color: var(--hon-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .hon-stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .hon-stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hon-stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .hon-stat-label {
+            color: var(--hon-text-secondary);
+        }
+        
+        .hon-stat-value {
+            color: var(--hon-text);
+            font-weight: 600;
+        }
+        
+        /* Изменения героев */
+        .hon-hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .hon-hero-change {
+            background: var(--hon-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--hon-border);
+        }
+        
+        .hon-hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--hon-border);
+        }
+        
+        .hon-hero-change-name {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .hon-change-tag {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .hon-tag-buff {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+        
+        .hon-tag-nerf {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+        
+        .hon-tag-new {
+            background: rgba(66, 153, 225, 0.2);
+            color: #4299e1;
+        }
+        
+        .hon-tag-fix {
+            background: rgba(160, 174, 192, 0.2);
+            color: #a0aec0;
+        }
+        
+        .hon-changes-list {
+            color: var(--hon-text-secondary);
+        }
+        
+        .hon-changes-list ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .hon-changes-list li {
+            margin-bottom: 8px;
+        }
+        
+        /* Особенности */
+        .hon-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .hon-feature-card {
+            background: var(--hon-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--hon-border);
+        }
+        
+        .hon-feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--hon-text);
+        }
+        
+        /* Подвал */
+        .hon-footer {
+            background: var(--hon-darker);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+            border-top: 1px solid var(--hon-border);
+        }
+        
+        .hon-footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .hon-footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--hon-red);
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .hon-footer-text {
+            color: var(--hon-text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 400px;
+        }
+        
+        .hon-copyright {
+            text-align: center;
+            color: var(--hon-text-secondary);
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--hon-border);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .hon-header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hon-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hon-patch-title {
+                font-size: 42px;
+            }
+            
+            .hon-section-title {
+                font-size: 32px;
+            }
+            
+            .hon-hero-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hon-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .hon-hero-card {
+                padding: 25px;
+            }
+            
+            .hon-ability {
+                padding: 20px;
+            }
+            
+            .hon-footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hon-patch-title {
+                font-size: 32px;
+            }
+            
+            .hon-section-title {
+                font-size: 28px;
+            }
+            
+            .hon-hero-name {
+                font-size: 36px;
+            }
+            
+            .hon-stat-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+        
+        /* Утилиты */
+        .hon-mb-20 { margin-bottom: 20px; }
+        .hon-mb-30 { margin-bottom: 30px; }
+        .hon-mb-40 { margin-bottom: 40px; }
+        .hon-mt-20 { margin-top: 20px; }
+        .hon-mt-30 { margin-top: 30px; }
+        .hon-mt-40 { margin-top: 40px; }
+        .hon-text-center { text-align: center; }
+        .hon-text-secondary { color: var(--hon-text-secondary); }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="hon-header">
+        <div class="hon-container hon-header-content">
+            <a href="#" class="hon-logo">
+                <span>HoN</span>Reborn
+            </a>
+            
+            <nav class="hon-nav">
+                <a href="#" class="hon-nav-link">Главная</a>
+                <a href="#" class="hon-nav-link active">Примечания к патчам</a>
+                <a href="#" class="hon-nav-link">Герои</a>
+                <a href="#" class="hon-nav-link">Предметы</a>
+                <a href="#" class="hon-nav-link">Гайды</a>
+                <a href="#" class="hon-nav-link">Сообщество</a>
+            </nav>
+            
+            <div class="hon-nav-link" style="background: linear-gradient(135deg, var(--hon-red), #c1121f); color: white; padding: 12px 28px; border-radius: 6px; font-weight: 600;">
+                Играть бесплатно
+            </div>
+        </div>
+    </header>
+
+    <!-- Главный баннер -->
+    <section class="hon-banner">
+        <div class="hon-container">
+            <h1 class="hon-patch-title">ПРИМЕЧАНИЯ К ПАТЧУ 0.9.1</h1>
+            <p class="hon-patch-subtitle">
+                Появился новый герой Master of Arms, обладающий универсальным набором оружия. Проведены важные изменения баланса героев. Добавлены удобства и улучшения качества игры.
+            </p>
+            <div class="hon-patch-date">25 ЯНВАРЯ 2026</div>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <main class="hon-container">
+        <!-- Новый герой -->
+        <section class="hon-section">
+            <h2 class="hon-section-title">НОВЫЙ ГЕРОЙ – MASTER OF ARMS</h2>
+            
+            <div class="hon-hero-card">
+                <h3 class="hon-hero-name">MASTER OF ARMS</h3>
+                
+                <!-- Q -->
+                <div class="hon-ability">
+                    <div class="hon-ability-header">
+                        <div class="hon-ability-hotkey">Q</div>
+                        <h4 class="hon-ability-title">OVERCHARGED SHOT</h4>
+                    </div>
+                    <p class="hon-ability-desc">
+                        Выпускает заряженную молнию, которая делится на два луча, достигнув цели.
+                    </p>
+                    <div class="hon-stats">
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Основная цель:</span>
+                            <span class="hon-stat-value">Магический урон: 70/140/210/280 ед.; Оглушение: 1.2/1.4/1.6/1.8 сек.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Разделённые лучи:</span>
+                            <span class="hon-stat-value">Магический урон: 100 ед.; Замедляет на 40% в течение 1.5 сек., постепенно ослабляя эффект.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- W -->
+                <div class="hon-ability">
+                    <div class="hon-ability-header">
+                        <div class="hon-ability-hotkey">W</div>
+                        <h4 class="hon-ability-title">ACID BOMB</h4>
+                    </div>
+                    <p class="hon-ability-desc">
+                        Метает кислотную бомбу в указанное место, которая катится и распыляет кислоту в течение 6 секунд.
+                    </p>
+                    <div class="hon-stats">
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Снижение брони:</span>
+                            <span class="hon-stat-value">−1/−2/−3/−4 ед.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Замедление скорости передвижения:</span>
+                            <span class="hon-stat-value">11/14/17/20%</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Физический урон:</span>
+                            <span class="hon-stat-value">20/35/50/65 ед./сек.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- E -->
+                <div class="hon-ability">
+                    <div class="hon-ability-header">
+                        <div class="hon-ability-hotkey">E</div>
+                        <h4 class="hon-ability-title">WEAPON ENHANCEMENT</h4>
+                    </div>
+                    <p class="hon-ability-desc">
+                        Позволяет переключаться между двумя режимами оружия с пассивными бонусами, увеличивающимися с уровнем:
+                    </p>
+                    <div class="hon-stats">
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Режим "BULLDOZER":</span>
+                            <span class="hon-stat-value">Атака с дистанции: +90/105/120/135/150; Дополнительный урон: +0/8/16/24/32. Активируйте, чтобы перейти в режим "CHEETAH".</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Режим "CHEETAH":</span>
+                            <span class="hon-stat-value">Минусуется дополнительный урон против героев: −0/22/18/14/10%; Скорость атаки увеличивается: +0/45/70/95/120. Активируйте, чтобы вернуться в режим "BULLDOZER".</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Предмет "STAFF OF THE MASTER":</span>
+                            <span class="hon-stat-value">одновременно даёт эффекты обоих режимов ("BULLDOZER" и "CHEETAH").</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- R -->
+                <div class="hon-ability">
+                    <div class="hon-ability-header">
+                        <div class="hon-ability-hotkey">R</div>
+                        <h4 class="hon-ability-title">MASTER'S CALL</h4>
+                    </div>
+                    <p class="hon-ability-desc">
+                        Выбор цели на самого себя или союзника для наложения щита, поглощающего 200/400/600 единиц полученного повреждения в течение максимум 8 секунд.
+                    </p>
+                    <div class="hon-stats">
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Бонус CHEETAH:</span>
+                            <span class="hon-stat-value">увеличение скорости атаки на 100/150/200 пунктов на 14 секунд.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Бонус BULLDOZER:</span>
+                            <span class="hon-stat-value">повышение наносимого урона на 40/50/60 единиц на 14 секунд.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Увеличение скорости передвижения:</span>
+                            <span class="hon-stat-value">постепенное снижение эффекта на первые 6 секунд (+60/90/120).</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">При наличии предмета STAFF OF THE MASTER:</span>
+                            <span class="hon-stat-value">бонусы уменьшаются до 70%-ной эффективности (скорость атаки: 70/105/140; прирост урона: 28/35/42 единицы).</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Описание героя -->
+                <div class="hon-ability">
+                    <h4 class="hon-ability-title">СПЕЦИАЛИСТ ПО ВООРУЖЕНИЮ, СОВРЕМЕННЫЕ БОЕВЫЕ ДЕЙСТВИЯ</h4>
+                    <p class="hon-ability-desc">
+                        Master of arms наконец-то присоединяется к HoN Reborn со своим уникальным арсеналом и динамичным стилем игры. Обладая оружием, которому нет равных, он сеет хаос среди врагов и вдохновляет союзников своей жаждой битвы. Полный комплект возможностей Мастера включает полный набор способностей, визуальные эффекты, звуки, реплики голоса, анимации и эффекты метательных снарядов.
+                    </p>
+                    <div class="hon-stats">
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Доступность:</span>
+                            <span class="hon-stat-value">доступен для выбора в матчмейкинге и публичных играх с защитой от блокировки на начальном этапе релиза.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Улучшение оружия:</span>
+                            <span class="hon-stat-value">пассивные бонусы повышают атаку по мере повышения уровня способностей.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Графическое оформление:</span>
+                            <span class="hon-stat-value">полная модернизация визуальных эффектов, звуков и голосовых линий для HoN Reborn.</span>
+                        </div>
+                        <div class="hon-stat-row">
+                            <span class="hon-stat-label">Аудиозаписи:</span>
+                            <span class="hon-stat-value">все классические звуковые реакции и боевое поведение полностью интегрированы.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основные особенности -->
+        <section class="hon-section">
+            <h2 class="hon-section-title">ОСНОВНЫЕ ОСОБЕННОСТИ</h2>
+            
+            <div class="hon-features">
+                <div class="hon-feature-card">
+                    <h3 class="hon-feature-title">ОБНОВЛЕНИЕ ИГРОВОГО ПРОЦЕССА</h3>
+                    <p class="hon-text-secondary">
+                        Этот патч приносит существенные изменения баланса. Более 25 героев получили значимые изменения наряду с глобальной настройкой предметов, предназначенной для встряски текущего метагейма. Нам интересно увидеть, какие новые стратегии возникнут в результате этих обновлений!
+                    </p>
+                </div>
+                
+                <div class="hon-feature-card">
+                    <h3 class="hon-feature-title">ИНДИКАТОРЫ ГОЛОСОВОГО ЧАТА В ИГРЕ</h3>
+                    <p class="hon-text-secondary">
+                        Добавлен индикатор голосового чата на панели инструментов, чтобы вы могли легко видеть, кто говорит и когда.
+                    </p>
+                </div>
+                
+                <div class="hon-feature-card">
+                    <h3 class="hon-feature-title">ТАБЛИЦА ЛИДЕРОВ ПО ТИПУ КАРТ</h3>
+                    <p class="hon-text-secondary">
+                        Таблицы лидеров теперь разделяются и отображаются по типу карты, что позволяет сосредоточиться на конкуренции в предпочитаемом игровом режиме.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Игровой патч -->
+        <section class="hon-section">
+            <h2 class="hon-section-title">ОБНОВЛЕНИЕ ИГРОВОГО ПРОЦЕССА</h2>
+            
+            <div class="hon-hero-card">
+                <h3 class="hon-ability-title">РОДНИКИ</h3>
+                <div class="hon-stats">
+                    <div class="hon-stat-row">
+                        <span class="hon-stat-label">Увеличен урон от атаки:</span>
+                        <span class="hon-stat-value">с 175 до 200 единиц.</span>
+                    </div>
+                    <div class="hon-stat-row">
+                        <span class="hon-stat-label">Новинка:</span>
+                        <span class="hon-stat-value">Получили способность гарантированно попадать по целям («True Strike»).</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Изменения героев -->
+        <section class="hon-section">
+            <h2 class="hon-section-title">ГЕРОИ</h2>
+            
+            <div class="hon-hero-grid">
+                <!-- Behemoth -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">BEHEMOTH</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Heavyweight (E)</strong></p>
+                        <ul>
+                            <li>Урон увеличен с 25/50/75/100 до 40/60/80/100.</li>
+                        </ul>
+                        <p><strong>Shockwave (R)</strong></p>
+                        <ul>
+                            <li>Отраженный урон увеличен с 30/40/50 до 30/45/60 единиц на единицу/с героя.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Chronos -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">CHRONOS</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p>Получение ловкости за уровень увеличено с 2.8 до 3.</p>
+                    </div>
+                </div>
+                
+                <!-- Corrupted Disciple -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">CORRUPTED DISCIPLE</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Static Discharge (E)</strong></p>
+                        <ul>
+                            <li>Повышение скорости передвижения увеличено с 3/6/9/12% до 4/8/12/16%.</li>
+                            <li>Нанесённый урон переформирован с 50/80/110/140 до 40/80/120/160.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Defiler -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">DEFILER</span>
+                        <span class="hon-change-tag hon-tag-nerf">Ослабление</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Grave Silence (W)</strong></p>
+                        <ul>
+                            <li>Продолжительность переформирована с 2/2.7/3.3/4 до 1.75/2.5/3.25/4.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Devourer -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">DEVOURER</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Guttling Hook (Q)</strong></p>
+                        <ul>
+                            <li>Радиус каста увеличен с 850/1000/1150/1300 до 925/1050/1175/1300.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Electrician -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">ELECTRICIAN</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Static Grip (Q)</strong></p>
+                        <ul>
+                            <li>Урон увеличен с 25/40/65/80 до 25/45/65/85.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Empath -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">EMPATH</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Essence Link (Q)</strong></p>
+                        <ul>
+                            <li>Урон/лечение увеличены с 100/150/190/230 до 100/150/200/250.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Engineer -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">ENGINEER</span>
+                        <span class="hon-change-tag hon-tag-nerf">Ослабление</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Steam Turret (W)</strong></p>
+                        <ul>
+                            <li>КД увеличено с 20/18/16/14 до 26/22/18/14 секунд.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Gemini -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">GEMINI</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Twin Fangs (W)</strong></p>
+                        <ul>
+                            <li>Урон каждой питомицы увеличен с 50/80/110/140 до 50/85/120/155.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Glacius -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">GLACIUS</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Tundra Blast (Q)</strong></p>
+                        <ul>
+                            <li>Урон перераспределён с 110/170/190/210 до 110/160/210/260.</li>
+                        </ul>
+                        <p><strong>Glacial Downpour (R)</strong></p>
+                        <ul>
+                            <li>Время удержания увеличено с 5 до 6 секунд.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Hellbringer -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">HELLBRINGER</span>
+                        <span class="hon-change-tag hon-tag-nerf">Ослабление</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Summon Malphas (R)</strong></p>
+                        <ul>
+                            <li>Эффект ауре Immunolate больше не суммируется.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Lodestone -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">LODESTONE</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p><strong>Lodestone Plates (E)</strong></p>
+                        <ul>
+                            <li>Блокируемый урон увеличен с 15/25/35/45 до 15/30/45/60.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Maliken -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">MALIKEN</span>
+                        <span class="hon-change-tag hon-tag-nerf">Ослабление</span>
+                    </div>
+                    <div class="hon-changes-list">
+                        <p>Прирост силы за уровень снижен с 3.5 до 3.2.</p>
+                        <p><strong>Possession (R)</strong></p>
+                        <ul>
+                            <li>Бонусная броня снижена с 10/15/20 до 5/10/15.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Monarch -->
+                <div class="hon-hero-change">
+                    <div class="hon-hero-header">
+                        <span class="hon-hero-change-name">MONARCH</span>
+                        <span class="hon-change-tag hon-tag-buff">Улучшение</span>
