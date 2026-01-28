@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Примечания к патчу 0.9.1 - Heroes of Newerth Reborn</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0f3460, #1a1a2e);
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+        }
+        
+        .patch-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #e63946);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .patch-subtitle {
+            font-size: 20px;
+            color: #a0a0a0;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .patch-date {
+            display: inline-block;
+            background: rgba(230, 57, 70, 0.2);
+            color: #e63946;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        
+        .section {
+            background: #141414;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            color: #e63946;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #e63946;
+        }
+        
+        .hero-name {
+            font-size: 36px;
+            color: #e63946;
+            margin-bottom: 30px;
+        }
+        
+        .ability {
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #457b9d;
+        }
+        
+        .ability-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .ability-desc {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .hero-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .hero-card {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        
+        .hero-card-title {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tag {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .tag-buff {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+        
+        .tag-nerf {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+        
+        .changes-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .changes-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .changes-list li:last-child {
+            border-bottom: none;
+        }
+        
+        @media (max-width: 768px) {
+            .patch-title {
+                font-size: 36px;
+            }
+            
+            .hero-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <div class="header">
+            <h1 class="patch-title">ПРИМЕЧАНИЯ К ПАТЧУ 0.9.1</h1>
+            <p class="patch-subtitle">
+                Появился новый герой Master of Arms, обладающий универсальным набором оружия. Проведены важные изменения баланса героев. Добавлены удобства и улучшения качества игры.
+            </p>
+            <div class="patch-date">25 ЯНВАРЯ 2026</div>
+        </div>
+        
+        <!-- Новый герой -->
+        <div class="section">
+            <h2 class="section-title">НОВЫЙ ГЕРОЙ – MASTER OF ARMS</h2>
+            
+            <h3 class="hero-name">MASTER OF ARMS</h3>
+            
+            <!-- Q -->
+            <div class="ability">
+                <h4 class="ability-title">OVERCHARGED SHOT (Q)</h4>
+                <p class="ability-desc">Выпускает заряженную молнию, которая делится на два луча, достигнув цели.</p>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Основная цель:</span>
+                        <span>Магический урон: 70/140/210/280 ед.; Оглушение: 1.2/1.4/1.6/1.8 сек.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Разделённые лучи:</span>
+                        <span>Магический урон: 100 ед.; Замедляет на 40% в течение 1.5 сек., постепенно ослабляя эффект.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- W -->
+            <div class="ability">
+                <h4 class="ability-title">ACID BOMB (W)</h4>
+                <p class="ability-desc">Метает кислотную бомбу в указанное место, которая катится и распыляет кислоту в течение 6 секунд.</p>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Снижение брони:</span>
+                        <span>−1/−2/−3/−4 ед.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Замедление скорости передвижения:</span>
+                        <span>11/14/17/20%</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Физический урон:</span>
+                        <span>20/35/50/65 ед./сек.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- E -->
+            <div class="ability">
+                <h4 class="ability-title">WEAPON ENHANCEMENT (E)</h4>
+                <p class="ability-desc">Позволяет переключаться между двумя режимами оружия с пассивными бонусами, увеличивающимися с уровнем:</p>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Режим "BULLDOZER":</span>
+                        <span>Атака с дистанции: +90/105/120/135/150; Дополнительный урон: +0/8/16/24/32. Активируйте, чтобы перейти в режим "CHEETAH".</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Режим "CHEETAH":</span>
+                        <span>Минусуется дополнительный урон против героев: −0/22/18/14/10%; Скорость атаки увеличивается: +0/45/70/95/120. Активируйте, чтобы вернуться в режим "BULLDOZER".</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Предмет "STAFF OF THE MASTER":</span>
+                        <span>одновременно даёт эффекты обоих режимов ("BULLDOZER" и "CHEETAH").</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- R -->
+            <div class="ability">
+                <h4 class="ability-title">MASTER'S CALL (R)</h4>
+                <p class="ability-desc">Выбор цели на самого себя или союзника для наложения щита, поглощающего 200/400/600 единиц полученного повреждения в течение максимум 8 секунд.</p>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Бонус CHEETAH:</span>
+                        <span>увеличение скорости атаки на 100/150/200 пунктов на 14 секунд.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Бонус BULLDOZER:</span>
+                        <span>повышение наносимого урона на 40/50/60 единиц на 14 секунд.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Увеличение скорости передвижения:</span>
+                        <span>постепенное снижение эффекта на первые 6 секунд (+60/90/120).</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>При наличии предмета STAFF OF THE MASTER:</span>
+                        <span>бонусы уменьшаются до 70%-ной эффективности (скорость атаки: 70/105/140; прирост урона: 28/35/42 единицы).</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Описание -->
+            <div class="ability">
+                <h4 class="ability-title">СПЕЦИАЛИСТ ПО ВООРУЖЕНИЮ, СОВРЕМЕННЫЕ БОЕВЫЕ ДЕЙСТВИЯ</h4>
+                <p class="ability-desc">
+                    Master of arms наконец-то присоединяется к HoN Reborn со своим уникальным арсеналом и динамичным стилем игры. Обладая оружием, которому нет равных, он сеет хаос среди врагов и вдохновляет союзников своей жаждой битвы. Полный комплект возможностей Мастера включает полный набор способностей, визуальные эффекты, звуки, реплики голоса, анимации и эффекты метательных снарядов.
+                </p>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Доступность:</span>
+                        <span>доступен для выбора в матчмейкинге и публичных играх с защитой от блокировки на начальном этапе релиза.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Улучшение оружия:</span>
+                        <span>пассивные бонусы повышают атаку по мере повышения уровня способностей.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Графическое оформление:</span>
+                        <span>полная модернизация визуальных эффектов, звуков и голосовых линий для HoN Reborn.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Аудиозаписи:</span>
+                        <span>все классические звуковые реакции и боевое поведение полностью интегрированы.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Основные особенности -->
+        <div class="section">
+            <h2 class="section-title">ОСНОВНЫЕ ОСОБЕННОСТИ</h2>
+            
+            <div class="ability">
+                <h4 class="ability-title">ОБНОВЛЕНИЕ ИГРОВОГО ПРОЦЕССА</h4>
+                <p class="ability-desc">
+                    Этот патч приносит существенные изменения баланса. Более 25 героев получили значимые изменения наряду с глобальной настройкой предметов, предназначенной для встряски текущего метагейма. Нам интересно увидеть, какие новые стратегии возникнут в результате этих обновлений!
+                </p>
+            </div>
+            
+            <div class="ability">
+                <h4 class="ability-title">ИНДИКАТОРЫ ГОЛОСОВОГО ЧАТА В ИГРЕ</h4>
+                <p class="ability-desc">
+                    Добавлен индикатор голосового чата на панели инструментов, чтобы вы могли легко видеть, кто говорит и когда.
+                </p>
+            </div>
+            
+            <div class="ability">
+                <h4 class="ability-title">ТАБЛИЦА ЛИДЕРОВ ПО ТИПУ КАРТ</h4>
+                <p class="ability-desc">
+                    Таблицы лидеров теперь разделяются и отображаются по типу карты, что позволяет сосредоточиться на конкуренции в предпочитаемом игровом режиме.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Игровой патч -->
+        <div class="section">
+            <h2 class="section-title">ОБНОВЛЕНИЕ ИГРОВОГО ПРОЦЕССА</h2>
+            
+            <div class="ability">
+                <h4 class="ability-title">РОДНИКИ</h4>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span>Увеличен урон от атаки:</span>
+                        <span>с 175 до 200 единиц.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Новинка:</span>
+                        <span>Получили способность гарантированно попадать по целям («True Strike»).</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Герои -->
+        <div class="section">
+            <h2 class="section-title">ГЕРОИ</h2>
+            
+            <div class="hero-list">
+                <!-- Behemoth -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>BEHEMOTH</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Heavyweight (E):</strong> Урон увеличен с 25/50/75/100 до 40/60/80/100.</li>
+                        <li><strong>Shockwave (R):</strong> Отраженный урон увеличен с 30/40/50 до 30/45/60 единиц на единицу/с героя.</li>
+                    </ul>
+                </div>
+                
+                <!-- Chronos -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>CHRONOS</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li>Получение ловкости за уровень увеличено с 2.8 до 3.</li>
+                    </ul>
+                </div>
+                
+                <!-- Corrupted Disciple -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>CORRUPTED DISCIPLE</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Static Discharge (E):</strong> Повышение скорости передвижения увеличено с 3/6/9/12% до 4/8/12/16%.</li>
+                        <li><strong>Static Discharge (E):</strong> Нанесённый урон переформирован с 50/80/110/140 до 40/80/120/160.</li>
+                    </ul>
+                </div>
+                
+                <!-- Defiler -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>DEFILER</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Grave Silence (W):</strong> Продолжительность переформирована с 2/2.7/3.3/4 до 1.75/2.5/3.25/4.</li>
+                    </ul>
+                </div>
+                
+                <!-- Devourer -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>DEVOURER</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Guttling Hook (Q):</strong> Радиус каста увеличен с 850/1000/1150/1300 до 925/1050/1175/1300.</li>
+                    </ul>
+                </div>
+                
+                <!-- Electrician -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>ELECTRICIAN</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Static Grip (Q):</strong> Урон увеличен с 25/40/65/80 до 25/45/65/85.</li>
+                    </ul>
+                </div>
+                
+                <!-- Empath -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>EMPATH</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Essence Link (Q):</strong> Урон/лечение увеличены с 100/150/190/230 до 100/150/200/250.</li>
+                    </ul>
+                </div>
+                
+                <!-- Engineer -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>ENGINEER</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Steam Turret (W):</strong> КД увеличено с 20/18/16/14 до 26/22/18/14 секунд.</li>
+                    </ul>
+                </div>
+                
+                <!-- Gemini -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>GEMINI</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Twin Fangs (W):</strong> Урон каждой питомицы увеличен с 50/80/110/140 до 50/85/120/155.</li>
+                    </ul>
+                </div>
+                
+                <!-- Glacius -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>GLACIUS</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Tundra Blast (Q):</strong> Урон перераспределён с 110/170/190/210 до 110/160/210/260.</li>
+                        <li><strong>Glacial Downpour (R):</strong> Время удержания увеличено с 5 до 6 секунд.</li>
+                    </ul>
+                </div>
+                
+                <!-- Hellbringer -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>HELLBRINGER</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Summon Malphas (R):</strong> Эффект ауре Immunolate больше не суммируется.</li>
+                    </ul>
+                </div>
+                
+                <!-- Lodestone -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>LODESTONE</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Lodestone Plates (E):</strong> Блокируемый урон увеличен с 15/25/35/45 до 15/30/45/60.</li>
+                    </ul>
+                </div>
+                
+                <!-- Maliken -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>MALIKEN</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li>Прирост силы за уровень снижен с 3.5 до 3.2.</li>
+                        <li><strong>Possession (R):</strong> Бонусная броня снижена с 10/15/20 до 5/10/15.</li>
+                    </ul>
+                </div>
+                
+                <!-- Monarch -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>MONARCH</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Crippling Pollen (Q):</strong> Урон перераспределён с 100/150/180/210 до 110/150/190/230.</li>
+                        <li><strong>Chrysalis (W):</strong> Лечение увеличено с 15/30/40/50 до 15/30/45/60.</li>
+                    </ul>
+                </div>
+                
+                <!-- Night Hound -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>NIGHT HOUND</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Pounce (W):</strong> Доп. урон снижен с 30/60/90/120 до 25/50/75/100.</li>
+                    </ul>
+                </div>
+                
+                <!-- Nymphora -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>NYMPHORA</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Nymphora's Zeal (W):</strong> Урон увеличен с 50/80/105/130 до 50/80/110/140.</li>
+                    </ul>
+                </div>
+                
+                <!-- Ophelia -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>OPHELIA</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Ophelia's Touch (R):</strong> Лечение увеличено с 200/300/400 до 250/350/450.</li>
+                    </ul>
+                </div>
+                
+                <!-- Pearl -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>PEARL</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Asphyxiate (Q):</strong> Взрывной урон перераспределён с 100/150/180/210 до 80/120/160/200.</li>
+                    </ul>
+                </div>
+                
+                <!-- Pestilence -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>PESTILENCE</span>
+                        <span class="tag tag-new">Новое</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Gore (E):</strong> Cooldown: 1.5c. Ваши атаки имеют шанс 25% нанести Bash, оглушив на 0.9/1/1.1/1.2 секунды и дополнительно нанеся физический урон 40/60/80/100.</li>
+                        <li><strong>Новинка:</strong> Если Gore не находится на кулдауне при убийстве крипов линии, тело крипа запускается на дистанцию 700 единиц в направлении вашего взгляда, нанося физический урон 40/60/80/100 и применяя оглушение длительностью 0.5/0.55/0.6/0.65 секунды первому врагу, которого оно настигнет.</li>
+                    </ul>
+                </div>
+                
+                <!-- Pharaoh -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>PHARAOH</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Hellfire (Q):</strong> Урон увеличен с 20/40/60/80 до 25/50/75/100.</li>
+                    </ul>
+                </div>
+                
+                <!-- Pollywog Priest -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>POLLYWOG PRIEST</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Voodoo Wards (R):</strong> КД сокращён с 120/110/100 до 110/100/90 секунд.</li>
+                    </ul>
+                </div>
+                
+                <!-- Prophet -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>PROPHET</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Debilitate (Q):</strong> Урон увеличен с 80/130/175/220 до 80/130/180/230.</li>
+                    </ul>
+                </div>
+                
+                <!-- Riftwalker -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>RIFTWALKER</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Cascade Event (Q):</strong> Базовый урон первого уровня увеличен с 110 до 120.</li>
+                        <li><strong>Cascade Event (Q):</strong> Дополнил урон за каждое попадание по врагу на 10/12/14/16.</li>
+                        <li><strong>Wormhole (R):</strong> Сейчас можно отменить раньше, получив слабый эффект.</li>
+                    </ul>
+                </div>
+                
+                <!-- Sand Wraith -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>SAND WRAITH</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Mirage (R):</strong> Переключаться на вражеских героев теперь блокируется Nullstone. Иллюзии всё равно появляются рядом с ними, но телепортация невозможна, если враг имеет Nullstone.</li>
+                        <li><strong>Mirage (R):</strong> Цель способности теперь направлена на вражеских героев, а не на землю.</li>
+                        <li><strong>Mirage (R):</strong> Создаются иллюзии только возле реальных вражеских героев.</li>
+                    </ul>
+                </div>
+                
+                <!-- Slither -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>SLITHER</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Poison Burst (R) — Staff of the Master:</strong> КД увеличен с 50 до 60.</li>
+                    </ul>
+                </div>
+                
+                <!-- Soul Reaper -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>SOUL REAPER</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Withering Presence (W):</strong> Больше не суммируется. (Иллюзии не накладывают ауру повторно на одного и того же героя.)</li>
+                    </ul>
+                </div>
+                
+                <!-- Tempest -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>TEMPEST</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Elemental (W):</strong> Урон питомца увеличен с 18/24/30/36 до 20/26/32/38.</li>
+                    </ul>
+                </div>
+                
+                <!-- Thunderbringer -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>THUNDERBRINGER</span>
+                        <span class="tag tag-buff">Улучшение</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Thunder Cloud (R):</strong> Урон увеличен с 200 до 250.</li>
+                    </ul>
+                </div>
+                
+                <!-- Vindicator -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>VINDICATOR</span>
+                        <span class="tag tag-nerf">Ослабление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Sage's Lore (Q):</strong> Длительность Disarm снижена с 1.25/1.5/1.75/2 до 1/1.25/1.5/1.75.</li>
+                    </ul>
+                </div>
+                
+                <!-- Zephyr -->
+                <div class="hero-card">
+                    <div class="hero-card-title">
+                        <span>ZEPHYR</span>
+                        <span class="tag tag-fix">Исправление</span>
+                    </div>
+                    <ul class="changes-list">
+                        <li><strong>Cyclones (W):</strong> Циклоны теперь наследуют невидимость владельца и больше не видны под эффектом невидимости вроде Shroud или Veiled Rot.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Подвал -->
+        <div class="section" style="text-align: center; background: #050505;">
+            <p style="color: #888; font-size: 14px;">
+                © 2026 Heroes of Newerth Reborn. Все права защищены.<br>
+                Перевод патч-ноутов 0.9.1 на русский язык.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
