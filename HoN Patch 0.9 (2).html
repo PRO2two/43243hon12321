@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Примечания к патчу 0.9.1 - Heroes of Newerth Reborn</title>
+    <link rel="icon" type="image/x-icon" href="https://heroesofnewerth.com/assets/favicon-CCNZYRvh.ico">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Основные стили как на оригинальном сайте */
+        :root {
+            --hon-primary: #e63946;
+            --hon-dark: #0a0a0a;
+            --hon-darker: #050505;
+            --hon-card: #141414;
+            --hon-text: #ffffff;
+            --hon-text-secondary: #a0a0a0;
+            --hon-border: #333333;
+            --hon-blue: #457b9d;
+            --hon-green: #2a9d8f;
+            --hon-purple: #9d4edd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--hon-dark);
+            color: var(--hon-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Контейнер */
+        .container-custom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Шапка */
+        .hon-header {
+            background: var(--hon-darker);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--hon-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .hon-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--hon-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .hon-logo i {
+            font-size: 32px;
+        }
+        
+        .hon-logo span {
+            color: var(--hon-text);
+        }
+        
+        .hon-nav {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: var(--hon-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 0;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--hon-text);
+        }
+        
+        .nav-link.active {
+            color: var(--hon-primary);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--hon-primary);
+        }
+        
+        .play-button {
+            background: linear-gradient(135deg, var(--hon-primary), #c1121f);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        /* Главный баннер */
+        .hon-banner {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .banner-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .patch-title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, var(--hon-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        
+        .patch-subtitle {
+            font-size: 20px;
+            color: var(--hon-text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+        
+        .patch-date {
+            display: inline-block;
+            background: rgba(230, 57, 70, 0.2);
+            color: var(--hon-primary);
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        /* Секции */
+        .hon-section {
+            margin-bottom: 80px;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--hon-text);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--hon-primary);
+            border-radius: 2px;
+        }
+        
+        /* Новый герой */
+        .hero-card {
+            background: var(--hon-card);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--hon-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-name {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--hon-primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .hero-name i {
+            font-size: 36px;
+        }
+        
+        /* Способности */
+        .ability {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--hon-blue);
+            transition: transform 0.2s;
+        }
+        
+        .ability:hover {
+            transform: translateX(5px);
+        }
+        
+        .ability-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .ability-hotkey {
+            background: var(--hon-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .ability-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--hon-text);
+        }
+        
+        .ability-desc {
+            color: var(--hon-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: var(--hon-text-secondary);
+            flex: 1;
+        }
+        
+        .stat-value {
+            color: var(--hon-text);
+            font-weight: 600;
+            flex: 2;
+            text-align: right;
+        }
+        
+        /* Изменения героев */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .hero-change {
+            background: var(--hon-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--hon-border);
+            transition: transform 0.2s;
+        }
+        
+        .hero-change:hover {
+            transform: translateY(-5px);
+        }
+        
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--hon-border);
+        }
+        
+        .hero-change-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--hon-text);
+        }
+        
+        .change-tag {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tag-buff {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+        
+        .tag-nerf {
+            background: rgba(245, 101, 101, 0.2);
+            color: #f56565;
+        }
+        
+        .tag-new {
+            background: rgba(66, 153, 225, 0.2);
+            color: #4299e1;
+        }
+        
+        .tag-fix {
+            background: rgba(160, 174, 192, 0.2);
+            color: #a0aec0;
+        }
+        
+        .changes-list {
+            color: var(--hon-text-secondary);
+            font-size: 14px;
+        }
+        
+        .changes-list ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .changes-list li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .changes-list strong {
+            color: var(--hon-text);
+            font-weight: 600;
+        }
+        
+        /* Особенности */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .feature-card {
+            background: var(--hon-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--hon-border);
+            transition: transform 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--hon-text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-title i {
+            color: var(--hon-primary);
+        }
+        
+        /* Подвал */
+        .hon-footer {
+            background: var(--hon-darker);
+            padding: 60px 0 40px;
+            margin-top: 80px;
+            border-top: 1px solid var(--hon-border);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--hon-primary);
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .footer-text {
+            color: var(--hon-text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 400px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .footer-link {
+            color: var(--hon-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .footer-link:hover {
+            color: var(--hon-text);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: var(--hon-text-secondary);
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--hon-border);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .patch-title {
+                font-size: 48px;
+            }
+            
+            .hero-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .features {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hon-nav {
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .patch-title {
+                font-size: 42px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+            }
+            
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-card {
+                padding: 25px;
+            }
+            
+            .ability {
+                padding: 20px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stat-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .stat-label, .stat-value {
+                text-align: left;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .patch-title {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .hero-name {
+                font-size: 36px;
+            }
+            
+            .ability-title {
+                font-size: 20px;
+            }
+            
+            .nav-link {
+                font-size: 14px;
+            }
+        }
+        
+        /* Утилиты */
+        .mb-20 { margin-bottom: 20px; }
+        .mb-30 { margin-bottom: 30px; }
+        .mb-40 { margin-bottom: 40px; }
+        .mt-20 { margin-top: 20px; }
+        .mt-30 { margin-top: 30px; }
+        .mt-40 { margin-top: 40px; }
+        .text-center { text-align: center; }
+        .text-secondary { color: var(--hon-text-secondary); }
+        .text-primary { color: var(--hon-primary); }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        /* Скроллбар */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--hon-darker);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--hon-primary);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c1121f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="hon-header">
+        <div class="container-custom">
+            <div class="header-content">
+                <a href="#" class="hon-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>HoN Reborn</span>
+                </a>
+                
+                <nav class="hon-nav">
+                    <a href="#" class="nav-link">Главная</a>
+                    <a href="#" class="nav-link active">Примечания к патчам</a>
+                    <a href="#" class="nav-link">Герои</a>
+                    <a href="#" class="nav-link">Предметы</a>
+                    <a href="#" class="nav-link">Гайды</a>
+                    <a href="#" class="nav-link">Сообщество</a>
+                </nav>
+                
+                <a href="#" class="play-button">
+                    <i class="fas fa-play me-2"></i>Играть бесплатно
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Главный баннер -->
+    <section class="hon-banner">
+        <div class="container-custom">
+            <div class="banner-content fade-in">
+                <h1 class="patch-title">ПРИМЕЧАНИЯ К ПАТЧУ 0.9.1</h1>
+                <p class="patch-subtitle">
+                    Появился новый герой Master of Arms, обладающий универсальным набором оружия. Проведены важные изменения баланса героев. Добавлены удобства и улучшения качества игры.
+                </p>
+                <div class="patch-date">25 ЯНВАРЯ 2026</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <main class="container-custom">
+        <!-- Новый герой -->
+        <section class="hon-section fade-in">
+            <h2 class="section-title">НОВЫЙ ГЕРОЙ – MASTER OF ARMS</h2>
+            
+            <div class="hero-card">
+                <h3 class="hero-name">
+                    <i class="fas fa-crosshairs"></i>MASTER OF ARMS
+                </h3>
+                
+                <!-- Q -->
+                <div class="ability">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">Q</div>
+                        <h4 class="ability-title">OVERCHARGED SHOT</h4>
+                    </div>
+                    <p class="ability-desc">
+                        Выпускает заряженную молнию, которая делится на два луча, достигнув цели.
+                    </p>
+                    <div class="stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Основная цель:</span>
+                            <span class="stat-value">Магический урон: 70/140/210/280 ед.; Оглушение: 1.2/1.4/1.6/1.8 сек.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Разделённые лучи:</span>
+                            <span class="stat-value">Магический урон: 100 ед.; Замедляет на 40% в течение 1.5 сек., постепенно ослабляя эффект.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- W -->
+                <div class="ability">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">W</div>
+                        <h4 class="ability-title">ACID BOMB</h4>
+                    </div>
+                    <p class="ability-desc">
+                        Метает кислотную бомбу в указанное место, которая катится и распыляет кислоту в течение 6 секунд.
+                    </p>
+                    <div class="stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Снижение брони:</span>
+                            <span class="stat-value">−1/−2/−3/−4 ед.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Замедление скорости передвижения:</span>
+                            <span class="stat-value">11/14/17/20%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Физический урон:</span>
+                            <span class="stat-value">20/35/50/65 ед./сек.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- E -->
+                <div class="ability">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">E</div>
+                        <h4 class="ability-title">WEAPON ENHANCEMENT</h4>
+                    </div>
+                    <p class="ability-desc">
+                        Позволяет переключаться между двумя режимами оружия с пассивными бонусами, увеличивающимися с уровнем:
+                    </p>
+                    <div class="stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Режим "BULLDOZER":</span>
+                            <span class="stat-value">Атака с дистанции: +90/105/120/135/150; Дополнительный урон: +0/8/16/24/32. Активируйте, чтобы перейти в режим "CHEETAH".</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Режим "CHEETAH":</span>
+                            <span class="stat-value">Минусуется дополнительный урон против героев: −0/22/18/14/10%; Скорость атаки увеличивается: +0/45/70/95/120. Активируйте, чтобы вернуться в режим "BULLDOZER".</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Предмет "STAFF OF THE MASTER":</span>
+                            <span class="stat-value">одновременно даёт эффекты обоих режимов ("BULLDOZER" и "CHEETAH").</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- R -->
+                <div class="ability">
+                    <div class="ability-header">
+                        <div class="ability-hotkey">R</div>
+                        <h4 class="ability-title">MASTER'S CALL</h4>
+                    </div>
+                    <p class="ability-desc">
+                        Выбор цели на самого себя или союзника для наложения щита, поглощающего 200/400/600 единиц полученного повреждения в течение максимум 8 секунд.
+                    </p>
+                    <div class="stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Бонус CHEETAH:</span>
+                            <span class="stat-value">увеличение скорости атаки на 100/150/200 пунктов на 14 секунд.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Бонус BULLDOZER:</span>
+                            <span class="stat-value">повышение наносимого урона на 40/50/60 единиц на 14 секунд.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Увеличение скорости передвижения:</span>
+                            <span class="stat-value">постепенное снижение эффект на первые 6 секунд (+60/90/120).</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">При наличии предмета STAFF OF THE MASTER:</span>
+                            <span class="stat-value">бонусы уменьшаются до 70%-ной эффективности (скорость атаки: 70/105/140; прирост урона: 28/35/42 единицы).</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Описание героя -->
+                <div class="ability">
+                    <h4 class="ability-title">СПЕЦИАЛИСТ ПО ВООРУЖЕНИЮ, СОВРЕМЕННЫЕ БОЕВЫЕ ДЕЙСТВИЯ</h4>
+                    <p class="ability-desc">
+                        Master of arms наконец-то присоединяется к HoN Reborn со своим уникальным арсеналом и динамичным стилем игры. Обладая оружием, которому нет равных, он сеет хаос среди врагов и вдохновляет союзников своей жаждой битвы. Полный комплект возможностей Мастера включает полный набор способностей, визуальные эффекты, звуки, реплики голоса, анимации и эффекты метательных снарядов.
+                    </p>
+                    <div class="stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Доступность:</span>
+                            <span class="stat-value">доступен для выбора в матчмейкинге и публичных играх с защитой от блокировки на начальном этапе релиза.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Улучшение оружия:</span>
+                            <span class="stat-value">пассивные бонусы повышают атаку по мере повышения уровня способностей.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Графическое оформление:</span>
+                            <span class="stat-value">полная модернизация визуальных эффектов, звуков и голосовых линий для HoN Reborn.</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Аудиозаписи:</span>
+                            <span class="stat-value">все классические звуковые реакции и боевое поведение полностью интегрированы.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основные особенности -->
+        <section class="hon-section fade-in">
+            <h2 class="section-title">ОСНОВНЫЕ ОСОБЕННОСТИ</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <h3 class="feature-title">
+                        <i class="fas fa-gamepad"></i>ОБНОВЛЕНИЕ ИГРОВОГО ПРОЦЕССА
+                    </h3>
+                    <p class="text-secondary">
+                        Этот патч приносит существенные изменения баланса. Более 25 героев получили значимые изменения наряду с глобальной настройкой предметов, предназначенной для встряски текущего метагейма. Нам интересно увидеть, какие новые стратегии возникнут в результате этих обновлений!
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">
+                        <i class="fas fa-microphone"></i>ИНДИКАТОРЫ ГОЛОСОВОГО ЧАТА В ИГРЕ
+                    </h3>
+                    <p class="text-secondary">
+                        Добавлен индикатор голосового чата на панели инструментов, чтобы вы могли легко видеть, кто говорит и когда.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">
+                        <i class="fas fa-trophy"></i>ТАБЛИЦА ЛИДЕРОВ ПО ТИПУ КАРТ
+                    </h3>
+                    <p class="text-secondary">
+                        Таблицы лидеров теперь разделяются и отображаются по типу карты, что позволяет сосредоточиться на конкуренции в предпочитаемом игровом режиме.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Игровой патч -->
+        <section class="hon-section fade-in">
+            <h2 class="section-title">ОБНОВЛЕНИЕ ИГРОВОГО ПРОЦЕССА</h2>
+            
+            <div class="hero-card">
+                <h3 class="ability-title">РОДНИКИ</h3>
+                <div class="stats">
+                    <div class="stat-row">
+                        <span class="stat-label">Увеличен урон от атаки:</span>
+                        <span class="stat-value">с 175 до 200 единиц.</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Новинка:</span>
+                        <span class="stat-value">Получили способность гарантированно попадать по целям («True Strike»).</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Изменения героев -->
+        <section class="hon-section fade-in">
+            <h2 class="section-title">ГЕРОИ</h2>
+            
+            <div class="hero-grid">
+                <!-- Behemoth -->
+                <div class="hero-change">
+                    <div class="hero-header">
+                        <span class="hero-change-name">BEHEMOTH</span>
+                        <span class="change-tag tag-buff">Улучшение</span>
+                    </div>
+                    <div class="changes-list">
+                        <p><strong>Heavyweight (E)</strong></p>
+                        <ul>
+                            <li>Урон увеличен с 25/50/75/100 до 40/60/80/100.</li>
+                        </ul>
+                        <p><strong>Shockwave (R)</strong></p>
+                        <ul>
+                            <li>Отраженный урон увеличен с 30/40/50 до 30/45/60 единиц на единицу/с героя.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Chronos -->
+                <div class="hero-change">
+                    <div class="hero-header">
+                        <span class="hero-change-name">CHRONOS</span>
+                        <span class="change-tag tag-buff">Улучшение</span>
+                    </div>
+                    <div class="changes-list">
+                        <p>Получение ловкости за уровень увеличено с 2.8 до 3.</p>
+                    </div>
+                </div>
+                
+                <!-- Corrupted Disciple -->
+                <div class="hero-change">
+                    <div class="hero-header">
+                        <span class="hero-change-name">CORRUPTED DISCIPLE</span>
+                        <span class="change-tag tag-buff">Улучшение</span>
+                    </div>
+                    <div class="changes-list">
+                        <p><strong>Static Discharge (E)</strong></p>
+                        <ul>
+                            <li>Повышение скорости передвижения увеличено с 3/6/9/12% до 4/8/12/16%.</li>
+                            <li>Нанесённый урон переформирован с 50/80/110/140 до 40/80/120/160.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Defiler -->
+                <div class="hero-change">
+                    <div class="hero-header">
+                        <span class="hero-change-name">DEFILER</span>
+                        <span class="change-tag tag-nerf">Ослабление</span>
+                    </div>
+                    <div class="changes-list">
+                        <p><strong>Grave Silence (W)</strong></p>
+                        <ul>
+                            <li>Продолжительность переформирована с 2/2.7/3.3/4 до 1.75/2.5/3.25/4.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Devourer -->
+                <div class="hero-change">
+                    <div class="hero-header">
+                        <span class="hero-change-name">DEVOURER</span>
+                        <span class="change-tag tag-buff">Улучшение</span>
+                    </div>
+                    <div class="changes-list">
+                        <p><strong>Guttling Hook (Q)</strong></p>
+                        <ul>
+                            <li>Радиус каста увеличен с 850/1000/1150/1300 до 925/1050/1175/1300.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Electrician -->
+                <div class="hero-change">
+                    <div class="hero-header">
+                        <span class="hero-change-name">ELECTRICIAN</span>
+                        <span class="change-tag tag-buff">Улучшение</span>
+                    </div>
+                    <div class="changes-list">
+                        <p><strong>Static Grip (Q)</strong></p>
+                        <ul>
+                            <li>Урон увеличен с 25
